@@ -1,17 +1,16 @@
 {
-  "name": "screensavery",
-  "version": "1.0.0",
-  "description": "",
-  "main": "src/sketch.js",
-  "source": "src/index.html",
+  "name": "my-vue-app",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
   "scripts": {
-    "start": "parcel",
-    "build": "parcel build"
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
   },
-  "author": "Teatov",
-  "license": "ISC",
   "devDependencies": {
-    "parcel": "^2.11.0"
+    "typescript": "^5.2.2",
+    "vite": "^5.1.4"
   },
   "dependencies": {
     "@types/p5": "^1.7.6",
