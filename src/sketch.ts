@@ -1,6 +1,6 @@
 import P5 from 'p5';
 import render from './render';
-import { FragmentData, FrameData } from './utils';
+import { FrameData } from './utils';
 
 const sketch = (p5: P5) => {
   const densityMaps = {

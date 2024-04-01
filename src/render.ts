@@ -1,6 +1,5 @@
 import P5 from 'p5';
 import {
-  FragmentData,
   FrameData,
   correctAspectRatio,
   fragment,
@@ -28,7 +27,7 @@ export default (p5: P5, frame: FrameData): Matrix => {
   return matrix;
 };
 
-const fullWhite = fragment((p5, f) => {
+const fullWhite = fragment(() => {
   return 1;
 });
 
