@@ -5,7 +5,7 @@ import gliderGun from './patterns/gliderGun.txt?raw';
 const gameOfLife: Renderer = (p5, frame, matrix) => {
   if (frame.t === 0) {
     p5.frameRate(10);
-
+    matrix = makeMatrix(frame.grid.w, frame.grid.h);
     const drawing = importMatrix(gliderGun);
     pasteOnMatrix(matrix, drawing, 10, 2);
     return matrix;
@@ -14,7 +14,7 @@ const gameOfLife: Renderer = (p5, frame, matrix) => {
   const next = makeMatrix(frame.grid.w, frame.grid.h);
 
   for (let y = 1; y < frame.grid.h - 1; y++) {
-    for (let x = 1; x < frame.grid.w - 1; x++) {
+    for (let x = 1; x < frame.grid.w - 1 - frame.pad; x++) {
       let neighbors = 0;
       for (let i = -1; i <= 1; i++) {
         for (let j = -1; j <= 1; j++) {

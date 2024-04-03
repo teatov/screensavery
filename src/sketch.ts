@@ -40,11 +40,22 @@ const sketch = (p5: P5) => {
 
   let matrix: Matrix = makeMatrix(gridW, gridH);
   let t = 0;
+  let persistentData: Record<string, any> = {};
+  const pad = 30;
+
+  const init = () => {
+    p5.frameRate(30);
+    t = 0;
+  };
+
+  document.getElementById('reset')?.addEventListener('click', () => {
+    init();
+  });
 
   p5.setup = () => {
     p5.createCanvas(screenW, screenH);
     p5.textFont('Ubuntu Mono');
-    p5.frameRate(30);
+    init();
   };
 
   p5.draw = () => {
@@ -65,6 +76,8 @@ const sketch = (p5: P5) => {
         w: charW,
         h: charH,
       },
+      data: persistentData,
+      pad,
     };
 
     matrix = render(p5, frame, matrix);
@@ -75,8 +88,8 @@ const sketch = (p5: P5) => {
         const x = j * charW;
 
         const valueRaw = matrix[i][j];
-        const valuePadded = rightPadding(valueRaw, j, frame, 30, 10);
-        const value = p5.min(p5.max(valuePadded, 0), 1);
+        const valuePadded = rightPadding(valueRaw, j, frame, pad, 10);
+        const value = p5.constrain(valuePadded, 0, 1);
 
         const drawDebug = false;
         if (drawDebug) {

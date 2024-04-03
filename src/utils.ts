@@ -11,6 +11,8 @@ export type FrameData = {
     w: number;
   };
   t: number;
+  data: Record<string, any>;
+  pad: number;
 };
 
 export type FragmentData = {
