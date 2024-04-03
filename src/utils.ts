@@ -74,6 +74,12 @@ export const pasteOnMatrix = (
 ): Matrix => {
   x = Math.round(x);
   y = Math.round(y);
+  if (x < 0) {
+    x = canvas[0].length + x;
+  }
+  if (y < 0) {
+    y = canvas.length + y;
+  }
   for (let i = 0; i < pastee.length; i++) {
     for (let j = 0; j < pastee[i].length; j++) {
       canvas[i + y][j + x] = pastee[i][j];
