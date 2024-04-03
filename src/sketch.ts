@@ -96,8 +96,10 @@ const sketch = (p5: P5) => {
         p5.rect(x, y, charW + 1, charH);
       }
 
+
       const charIndex = p5.round(p5.map(value, 0, 1, 0, density.length - 1));
-      p5.text(density[charIndex], x + charW * 0.5, y + charH * 0.5);
+      const char = density[charIndex];
+      p5.text(char, x + charW * 0.5, y + charH * 0.5);
     });
 
     t++;

@@ -11,7 +11,7 @@ const brownianMotion: Renderer = (p5, frame, matrix) => {
     frame.data.at = 0;
   }
 
-  matrix = traverse(matrix, (v, _x, _y) => v * 0.99);
+  matrix = traverse(matrix, (v, _x, _y) => (v as number) * 0.99);
 
   let { ax, ay, at, dirX, dirY } = frame.data;
 

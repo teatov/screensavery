@@ -53,12 +53,12 @@ export const rightPadding = (
 ) => {
   const padStart = frame.grid.w - pad;
   const smoothStart = padStart - smooth;
-  if (j < padStart) {
+  if (j > padStart) {
+    value = 0;
+  } else if (j > smoothStart) {
     const jRelative = j - smoothStart;
     const smoothAmount = 1 - jRelative / smooth;
     value *= smoothAmount;
-  } else if (j < frame.grid.w) {
-    value = 0;
   }
   return value;
 };

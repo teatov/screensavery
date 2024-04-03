@@ -1,7 +1,7 @@
 import { Renderer } from '../render';
 import { traverse } from '../utils';
 
-export const dvd: Renderer = (p5, frame, matrix) => {
+const dvd: Renderer = (p5, frame, matrix) => {
   if (frame.t === 0) {
     frame.data.ax = p5.round(p5.random(0, frame.grid.w - frame.pad - 1));
     frame.data.ay = p5.round(p5.random(0, frame.grid.h - 1));
@@ -50,3 +50,5 @@ export const dvd: Renderer = (p5, frame, matrix) => {
 
   return matrix;
 };
+
+export default dvd;
