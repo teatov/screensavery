@@ -87,18 +87,23 @@ const sketch = (p5: P5) => {
       const y = i * charH;
       const x = j * charW;
 
-      const valuePadded = rightPadding(v, j, frame, pad, padSmooth);
-      const value = p5.constrain(valuePadded, 0, 1);
+      let char = '';
 
-      const drawDebug = false;
-      if (drawDebug) {
-        p5.fill(p5.lerpColor(bgColor, fgColor, value));
-        p5.rect(x, y, charW + 1, charH);
+      if (typeof v === 'string') {
+        char = v;
+      } else {
+        const valuePadded = rightPadding(v, j, frame, pad, padSmooth);
+        const value = p5.constrain(valuePadded, 0, 1);
+
+        const drawDebug = false;
+        if (drawDebug) {
+          p5.fill(p5.lerpColor(bgColor, fgColor, value));
+          p5.rect(x, y, charW + 1, charH);
+        }
+
+        const charIndex = p5.round(p5.map(value, 0, 1, 0, density.length - 1));
+        char = density[charIndex];
       }
-
-
-      const charIndex = p5.round(p5.map(value, 0, 1, 0, density.length - 1));
-      const char = density[charIndex];
       p5.text(char, x + charW * 0.5, y + charH * 0.5);
     });
 

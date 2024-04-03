@@ -13,7 +13,7 @@ import brownianMotion from './renderers/brownianMotion';
 import dvd from './renderers/dvd';
 import ticTacToe from './renderers/ticTacToe';
 
-export type Matrix = number[][];
+export type Matrix = (number | string)[][];
 export type Renderer = (p5: P5, frame: FrameData, matrix: Matrix) => Matrix;
 
 const renderers: Record<string, Renderer> = {
@@ -30,5 +30,5 @@ const renderers: Record<string, Renderer> = {
 };
 
 export default (p5: P5, frame: FrameData, matrix: Matrix): Matrix => {
-  return renderers.ticTacToe(p5, frame, matrix);
+  return renderers.sinCosMult(p5, frame, matrix);
 };

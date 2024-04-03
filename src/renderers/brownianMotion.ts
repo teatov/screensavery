@@ -27,7 +27,8 @@ const brownianMotion: Renderer = (p5, frame, matrix) => {
   ax = p5.constrain(ax, 0, frame.grid.w - 1 - frame.pad);
   ay = p5.constrain(ay, 0, frame.grid.h - 1);
 
-  matrix[ay][ax] += 1;
+  const v = matrix[ay][ax] as number;
+  matrix[ay][ax] = v + 1;
 
   at += 1;
 

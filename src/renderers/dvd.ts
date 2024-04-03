@@ -33,13 +33,14 @@ const dvd: Renderer = (p5, frame, matrix) => {
   ax = newX;
   ay = newY;
 
-  matrix = traverse(matrix, (v, _x, _y) => v * 0.75);
+  matrix = traverse(matrix, (v, _x, _y) => (v as number) * 0.75);
 
   const roundX = p5.round(ax);
   const roundY = p5.round(ay);
   for (let y = roundY; y < roundY + width; y++) {
     for (let x = roundX; x < roundX + width; x++) {
-      matrix[y][x] += 1;
+      const v = matrix[y][x] as number;
+      matrix[y][x] = v + 1;
     }
   }
 

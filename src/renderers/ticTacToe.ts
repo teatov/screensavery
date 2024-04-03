@@ -1,9 +1,9 @@
 import { Matrix, Renderer } from '../render';
 import { makeMatrix, pasteOnMatrix } from '../utils';
 
-const n = 0.4;
-const c = 0.5;
-const width = 5;
+const n = 'o';
+const c = 'x';
+const width = 3;
 enum Turn {
   N,
   C,
@@ -29,7 +29,7 @@ const ticTacToe: Renderer = (p5, frame, matrix) => {
     const winPos: Pos[] = frame.data.winPos;
     for (let i = 0; i < winPos.length; i++) {
       const { x, y } = winPos[i];
-      board[x][y] = 0.9;
+      board[x][y] = '!';
     }
   } else {
     const checkWin = check(board);
@@ -91,10 +91,10 @@ const check = (board: Matrix): { t: Turn; pos: Pos[] } => {
 
   for (let t = 0; t < posToCheck.length; t++) {
     const toCheck = posToCheck[t];
-    let v = 0;
+    let v: number | string = 0;
     for (let i = 0; i < toCheck.length; i++) {
       const { x, y } = toCheck[i];
-      const vPrev = v;
+      const vPrev: number | string = v;
       v = board[x][y];
       if (i > 0 && vPrev !== v) {
         break;

@@ -1,5 +1,5 @@
 import { Renderer } from '../render';
-import { importMatrix, makeMatrix, pasteOnMatrix, traverse } from '../utils';
+import { importMatrix, makeMatrix, pasteOnMatrix } from '../utils';
 import patterns from './patterns';
 
 const gameOfLife: Renderer = (p5, frame, matrix) => {
@@ -22,11 +22,11 @@ const gameOfLife: Renderer = (p5, frame, matrix) => {
       let neighbors = 0;
       for (let i = -1; i <= 1; i++) {
         for (let j = -1; j <= 1; j++) {
-          neighbors += matrix[y + i][x + j];
+          neighbors += matrix[y + i][x + j] as number;
         }
       }
 
-      neighbors -= matrix[y][x];
+      neighbors -= matrix[y][x] as number;
       if (matrix[y][x] === 1 && neighbors < 2) next[y][x] = 0;
       else if (matrix[y][x] === 1 && neighbors > 3) next[y][x] = 0;
       else if (matrix[y][x] === 0 && neighbors === 3) next[y][x] = 1;

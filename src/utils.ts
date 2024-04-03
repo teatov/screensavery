@@ -25,14 +25,11 @@ export const fragment = (
   shader: (p5: P5, f: FragmentData) => number
 ): Renderer => {
   return (p5: P5, frame: FrameData, matrix: Matrix) => {
-    for (let y = 0; y < frame.grid.h; y++) {
-      matrix[y] = [];
-      for (let x = 0; x < frame.grid.w; x++) {
-        const data: FragmentData = { y, x, frame };
-
-        matrix[y][x] = shader(p5, data);
-      }
-    }
+    matrix = makeMatrix(frame.grid);
+    traverse(matrix, (_v, x, y) => {
+      const data: FragmentData = { y, x, frame };
+      matrix[y][x] = shader(p5, data);
+    });
 
     return matrix;
   };
@@ -103,7 +100,7 @@ export const importMatrix = (text: string): Matrix => {
 
 export const traverse = (
   matrix: Matrix,
-  func: (v: number, x: number, y: number) => number | void,
+  func: (v: number | string, x: number, y: number) => number | string | void,
   pad?: number
 ): Matrix => {
   for (let y = 0; y < matrix.length - (pad ?? 0); y++) {
