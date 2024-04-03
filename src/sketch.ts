@@ -95,7 +95,8 @@ const sketch = (p5: P5) => {
         const valuePadded = rightPadding(v, j, frame, pad, padSmooth);
         const value = p5.constrain(valuePadded, 0, 1);
 
-        const drawDebug = false;
+        let drawDebug = false;
+        // drawDebug = true;
         if (drawDebug) {
           p5.fill(p5.lerpColor(bgColor, fgColor, value));
           p5.rect(x, y, charW + 1, charH);
