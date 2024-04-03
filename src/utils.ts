@@ -1,4 +1,4 @@
-import { Matrix } from './render';
+import { Matrix, Renderer } from './render';
 import P5 from 'p5';
 
 export type FrameData = {
@@ -19,10 +19,10 @@ export type FragmentData = {
   frame: FrameData;
 };
 
-export const fragment = (shader: (p5: P5, f: FragmentData) => number) => {
-  return (p5: P5, frame: FrameData): Matrix => {
-    const matrix: Matrix = [];
-
+export const fragment = (
+  shader: (p5: P5, f: FragmentData) => number
+): Renderer => {
+  return (p5: P5, frame: FrameData, matrix: Matrix) => {
     for (let i = 0; i < frame.grid.h; i++) {
       matrix[i] = [];
       for (let j = 0; j < frame.grid.w; j++) {
@@ -47,23 +47,54 @@ export const correctAspectRatio = (f: FragmentData) => {
 };
 
 export const rightPadding = (
+  value: number,
+  j: number,
   frame: FrameData,
-  matrix: Matrix,
   pad: number,
   smooth: number
 ) => {
-  for (let i = 0; i < frame.grid.h; i++) {
-    const padStart = frame.grid.w - pad;
-    const smoothStart = padStart - smooth;
+  const padStart = frame.grid.w - pad;
+  const smoothStart = padStart - smooth;
+  if (j < padStart) {
+    const jRelative = j - smoothStart;
+    const smoothAmount = 1 - jRelative / smooth;
+    value *= smoothAmount;
+  } else if (j < frame.grid.w) {
+    value = 0;
+  }
+  return value;
+};
 
-    for (let j = smoothStart; j < padStart; j++) {
-      const jRelative = j - smoothStart;
-      const smoothAmount = 1 - jRelative / smooth;
-      matrix[i][j] *= smoothAmount;
-    }
+export const makeMatrix = (w: number, h: number): Matrix => {
+  return new Array(h).fill([]).map(() => new Array(w).fill(0));
+};
 
-    for (let j = padStart; j < frame.grid.w; j++) {
-      matrix[i][j] = 0;
+export const pasteOnMatrix = (
+  canvas: Matrix,
+  pastee: Matrix,
+  x: number,
+  y: number
+): Matrix => {
+  for (let i = 0; i < pastee.length; i++) {
+    for (let j = 0; j < pastee[i].length; j++) {
+      canvas[i + y][j + x] = pastee[i][j];
     }
   }
+  return canvas;
+};
+
+export const importMatrix = (text: string): Matrix => {
+  return text.split('\n').map((row: string): number[] =>
+    row.split('').map((col: string): number => {
+      const empty = [' ', '.'];
+      const full = ['1', 'O'];
+      if (empty.includes(col)) {
+        return 0;
+      }
+      if (full.includes(col)) {
+        return 1;
+      }
+      return 0;
+    })
+  );
 };

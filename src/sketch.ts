@@ -1,6 +1,6 @@
 import P5 from 'p5';
-import render from './render';
-import { FrameData } from './utils';
+import render, { Matrix } from './render';
+import { FrameData, makeMatrix, rightPadding } from './utils';
 
 const sketch = (p5: P5) => {
   const densityMaps = {
@@ -9,42 +9,47 @@ const sketch = (p5: P5) => {
     min: ' .:-=+*#%@',
   };
   const density = densityMaps.min;
+
+  const bgColors = {
+    black: '#000',
+    slate: '#020617',
+    gray: '#030712',
+    zinc: '#09090b',
+    neutral: '#0a0a0a',
+    stone: '#0c0a09',
+  };
+  const bgColor = p5.color(bgColors.gray);
+
+  const fgColors = {
+    slate: '#94a3b8',
+    gray: '#9ca3af',
+    zinc: '#a1a1aa',
+    neutral: '#a3a3a3',
+    stone: '#a8a29e',
+  };
+  const fgColor = p5.color(fgColors.gray);
+
+  const gridW = 110;
+  const gridH = 40;
+
+  const screenW = 1920;
+  const screenH = 1080;
+
+  const charW = screenW / gridW;
+  const charH = screenH / gridH;
+
+  let matrix: Matrix = makeMatrix(gridW, gridH);
   let t = 0;
 
-  const gridWidth = 110;
-  const gridHeight = 40;
-
   p5.setup = () => {
-    p5.createCanvas(1920, 1080);
+    p5.createCanvas(screenW, screenH);
     p5.textFont('Ubuntu Mono');
+    p5.frameRate(30);
   };
 
   p5.draw = () => {
-    p5.frameRate(30);
-
-    const bgColors = {
-      black: '#000',
-      slate: '#020617',
-      gray: '#030712',
-      zinc: '#09090b',
-      neutral: '#0a0a0a',
-      stone: '#0c0a09',
-    };
-    const bgColor = p5.color(bgColors.gray);
     p5.background(bgColor);
-
-    const fgColors = {
-      slate: '#94a3b8',
-      gray: '#9ca3af',
-      zinc: '#a1a1aa',
-      neutral: '#a3a3a3',
-      stone: '#a8a29e',
-    };
-    const fgColor = p5.color(fgColors.gray);
     p5.fill(fgColor);
-
-    const charW = p5.width / gridWidth;
-    const charH = p5.height / gridHeight;
 
     p5.noStroke();
     p5.textSize(charH * 1.2);
@@ -53,8 +58,8 @@ const sketch = (p5: P5) => {
     const frame: FrameData = {
       t,
       grid: {
-        w: gridWidth,
-        h: gridHeight,
+        w: gridW,
+        h: gridH,
       },
       char: {
         w: charW,
@@ -62,7 +67,7 @@ const sketch = (p5: P5) => {
       },
     };
 
-    const matrix = render(p5, frame);
+    matrix = render(p5, frame, matrix);
 
     for (let i = 0; i < frame.grid.h; i++) {
       for (let j = 0; j < frame.grid.w; j++) {
@@ -70,7 +75,8 @@ const sketch = (p5: P5) => {
         const x = j * charW;
 
         const valueRaw = matrix[i][j];
-        const value = p5.min(p5.max(valueRaw, 0), 1);
+        const valuePadded = rightPadding(valueRaw, j, frame, 30, 10);
+        const value = p5.min(p5.max(valuePadded, 0), 1);
 
         const drawDebug = false;
         if (drawDebug) {
