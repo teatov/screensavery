@@ -21,8 +21,8 @@ const brownianMotion: Renderer = (p5, frame, matrix) => {
 
   if (at === 0) {
     do {
-      dirX = p5.round(p5.random(-1, 1));
-      dirY = p5.round(p5.random(-1, 1));
+      dirX = p5.round(p5.random([-1, 0, 1]));
+      dirY = p5.round(p5.random([-1, 0, 1]));
     } while (dirX === 0 && dirY === 0);
   }
 
