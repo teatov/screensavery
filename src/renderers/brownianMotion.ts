@@ -35,7 +35,7 @@ const brownianMotion: Renderer = (p5, frame, matrix) => {
 
   at += 1;
 
-  if (at === 3) {
+  if (at === 4) {
     at = 0;
   }
 
