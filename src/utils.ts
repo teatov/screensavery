@@ -25,16 +25,12 @@ export const fragment = (
   shader: (p5: P5, f: FragmentData) => number
 ): Renderer => {
   return (p5: P5, frame: FrameData, matrix: Matrix) => {
-    for (let i = 0; i < frame.grid.h; i++) {
-      matrix[i] = [];
-      for (let j = 0; j < frame.grid.w; j++) {
-        const data: FragmentData = {
-          y: i,
-          x: j,
-          frame,
-        };
+    for (let y = 0; y < frame.grid.h; y++) {
+      matrix[y] = [];
+      for (let x = 0; x < frame.grid.w; x++) {
+        const data: FragmentData = { y, x, frame };
 
-        matrix[i][j] = shader(p5, data);
+        matrix[y][x] = shader(p5, data);
       }
     }
 
@@ -67,8 +63,10 @@ export const rightPadding = (
   return value;
 };
 
-export const makeMatrix = (w: number, h: number): Matrix => {
-  return new Array(h).fill([]).map(() => new Array(w).fill(0));
+export const makeMatrix = (dimensions: { h: number; w: number }): Matrix => {
+  return new Array(dimensions.h)
+    .fill([])
+    .map(() => new Array(dimensions.w).fill(0));
 };
 
 export const pasteOnMatrix = (
@@ -77,6 +75,8 @@ export const pasteOnMatrix = (
   x: number,
   y: number
 ): Matrix => {
+  x = Math.round(x);
+  y = Math.round(y);
   for (let i = 0; i < pastee.length; i++) {
     for (let j = 0; j < pastee[i].length; j++) {
       canvas[i + y][j + x] = pastee[i][j];
@@ -99,4 +99,17 @@ export const importMatrix = (text: string): Matrix => {
       return 0;
     })
   );
+};
+
+export const traverse = (
+  matrix: Matrix,
+  func: (v: number, x: number, y: number) => number | void,
+  pad?: number
+): Matrix => {
+  for (let y = 0; y < matrix.length - (pad ?? 0); y++) {
+    for (let x = 0; x < matrix[y].length; x++) {
+      matrix[y][x] = func(matrix[y][x], x, y) ?? matrix[y][x];
+    }
+  }
+  return matrix;
 };

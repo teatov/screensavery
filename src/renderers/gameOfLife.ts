@@ -1,17 +1,21 @@
 import { Renderer } from '../render';
-import { importMatrix, makeMatrix, pasteOnMatrix } from '../utils';
-import gliderGun from './patterns/gliderGun.txt?raw';
+import { importMatrix, makeMatrix, pasteOnMatrix, traverse } from '../utils';
+import patterns from './patterns';
 
 const gameOfLife: Renderer = (p5, frame, matrix) => {
   if (frame.t === 0) {
     p5.frameRate(10);
-    matrix = makeMatrix(frame.grid.w, frame.grid.h);
-    const drawing = importMatrix(gliderGun);
-    pasteOnMatrix(matrix, drawing, 10, 2);
+    matrix = makeMatrix(frame.grid);
+    const drawing = importMatrix(patterns.gliderGun);
+    let x = frame.grid.w / 3;
+    let y = frame.grid.h / 4;
+    x -= drawing[0].length / 2;
+    y -= drawing.length / 2;
+    pasteOnMatrix(matrix, drawing, x, y);
     return matrix;
   }
 
-  const next = makeMatrix(frame.grid.w, frame.grid.h);
+  const next = makeMatrix(frame.grid);
 
   for (let y = 1; y < frame.grid.h - 1; y++) {
     for (let x = 1; x < frame.grid.w - 1 - frame.pad; x++) {

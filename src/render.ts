@@ -7,38 +7,26 @@ import {
   fullWhite,
   sinCosMult,
   perlin3dSlice,
-  fullBlack,
+  sineWave,
 } from './renderers/simple';
 import brownianMotion from './renderers/brownianMotion';
+import { dvd } from './renderers/dvd';
 
 export type Matrix = number[][];
 export type Renderer = (p5: P5, frame: FrameData, matrix: Matrix) => Matrix;
 
-const renderers = {
+const renderers: Record<string, Renderer> = {
   identity,
   fullWhite,
-  fullBlack,
   sinCosMult,
   perlin3dSlice,
+  sineWave,
   perlinScrollMultiply,
   gameOfLife,
   brownianMotion,
+  dvd
 };
-type RendererName = keyof typeof renderers;
-let currentRenderer: Renderer =
-  renderers[(localStorage.getItem('renderer') as RendererName) ?? 'identity'];
-
-const renderersContainer = document.getElementById('renderers')!;
-Object.keys(renderers).forEach((key) => {
-  renderersContainer.innerHTML += `<button id="${key}">${key}</button>`;
-});
-Object.keys(renderers).forEach((key) => {
-  document.getElementById(key)?.addEventListener('click', () => {
-    localStorage.setItem('renderer', key);
-    currentRenderer = renderers[key as RendererName];
-  });
-});
 
 export default (p5: P5, frame: FrameData, matrix: Matrix): Matrix => {
-  return currentRenderer(p5, frame, matrix);
+  return renderers.dvd(p5, frame, matrix);
 };

@@ -1,9 +1,9 @@
 import { Renderer } from '../render';
-import { makeMatrix } from '../utils';
+import { makeMatrix, traverse } from '../utils';
 
 const brownianMotion: Renderer = (p5, frame, matrix) => {
   if (frame.t === 0) {
-    matrix = makeMatrix(frame.grid.w, frame.grid.h);
+    matrix = makeMatrix(frame.grid);
     frame.data.ax = Math.floor(frame.grid.w / 2);
     frame.data.ay = Math.floor(frame.grid.h / 2);
     frame.data.dirX = 0;
@@ -11,11 +11,7 @@ const brownianMotion: Renderer = (p5, frame, matrix) => {
     frame.data.at = 0;
   }
 
-  for (let i = 0; i < frame.grid.h; i++) {
-    for (let j = 0; j < frame.grid.w; j++) {
-      matrix[i][j] *= 0.99;
-    }
-  }
+  matrix = traverse(matrix, (v, _x, _y) => v * 0.99);
 
   let { ax, ay, at, dirX, dirY } = frame.data;
 

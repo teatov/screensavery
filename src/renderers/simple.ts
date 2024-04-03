@@ -1,5 +1,5 @@
 import { Renderer } from '../render';
-import { fragment, correctAspectRatio } from '../utils';
+import { fragment, correctAspectRatio, makeMatrix } from '../utils';
 
 export const identity: Renderer = (_p5, _frame, matrix) => {
   return matrix;
@@ -38,3 +38,20 @@ export const perlin3dSlice: Renderer = fragment((p5, f) => {
 
   return v;
 });
+
+export const sineWave: Renderer = (p5, frame, matrix) => {
+  matrix = makeMatrix(frame.grid);
+
+  for (let x = 0; x < frame.grid.w; x++) {
+    const amplitude = 4;
+    const frequency = 0.25;
+    const speed = 0.1;
+    const f = p5.sin(x * frequency + frame.t * speed) * amplitude;
+
+    const y = p5.round(f) + frame.grid.h / 2;
+
+    matrix[y][x] = 1;
+  }
+
+  return matrix;
+};

@@ -1,6 +1,6 @@
 import P5 from 'p5';
 import render, { Matrix } from './render';
-import { FrameData, makeMatrix, rightPadding } from './utils';
+import { FrameData, makeMatrix, rightPadding, traverse } from './utils';
 
 const sketch = (p5: P5) => {
   const densityMaps = {
@@ -38,10 +38,11 @@ const sketch = (p5: P5) => {
   const charW = screenW / gridW;
   const charH = screenH / gridH;
 
-  let matrix: Matrix = makeMatrix(gridW, gridH);
+  let matrix: Matrix = makeMatrix({ w: gridW, h: gridH });
   let t = 0;
   let persistentData: Record<string, any> = {};
-  const pad = 30;
+  const padSmooth = 10;
+  const pad = p5.round(gridW / 3) - padSmooth;
 
   const init = () => {
     p5.frameRate(30);
@@ -77,31 +78,27 @@ const sketch = (p5: P5) => {
         h: charH,
       },
       data: persistentData,
-      pad,
+      pad: pad + padSmooth,
     };
 
     matrix = render(p5, frame, matrix);
 
-    for (let i = 0; i < frame.grid.h; i++) {
-      for (let j = 0; j < frame.grid.w; j++) {
-        const y = i * charH;
-        const x = j * charW;
+    traverse(matrix, (v, j, i) => {
+      const y = i * charH;
+      const x = j * charW;
 
-        const valueRaw = matrix[i][j];
-        const valuePadded = rightPadding(valueRaw, j, frame, pad, 10);
-        const value = p5.constrain(valuePadded, 0, 1);
+      const valuePadded = rightPadding(v, j, frame, pad, padSmooth);
+      const value = p5.constrain(valuePadded, 0, 1);
 
-        const drawDebug = false;
-        if (drawDebug) {
-          p5.fill(p5.lerpColor(bgColor, fgColor, value));
-          p5.rect(x, y, charW + 1, charH);
-          continue;
-        }
-
-        const charIndex = p5.round(p5.map(value, 0, 1, 0, density.length - 1));
-        p5.text(density[charIndex], x + charW * 0.5, y + charH * 0.5);
+      const drawDebug = false;
+      if (drawDebug) {
+        p5.fill(p5.lerpColor(bgColor, fgColor, value));
+        p5.rect(x, y, charW + 1, charH);
       }
-    }
+
+      const charIndex = p5.round(p5.map(value, 0, 1, 0, density.length - 1));
+      p5.text(density[charIndex], x + charW * 0.5, y + charH * 0.5);
+    });
 
     t++;
   };
