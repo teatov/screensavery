@@ -45,7 +45,7 @@ const sketch = (p5: P5) => {
   const pad = p5.round(gridW / 3) - padSmooth;
 
   const init = () => {
-    p5.frameRate(30);
+    p5.frameRate(5);
     t = 0;
   };
 
