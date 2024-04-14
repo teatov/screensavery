@@ -29,7 +29,7 @@ const sketch = (p5: P5) => {
   };
   const fgColor = p5.color(fgColors.gray);
 
-  const gridW = 110;
+  const gridW = 90;
   const gridH = 40;
 
   const screenW = 1920;
@@ -55,7 +55,7 @@ const sketch = (p5: P5) => {
 
   p5.setup = () => {
     p5.createCanvas(screenW, screenH);
-    p5.textFont('Ubuntu Mono');
+    p5.textFont('Maple Mono');
     init();
   };
 

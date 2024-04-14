@@ -32,5 +32,5 @@ const renderers: Record<string, Renderer> = {
 };
 
 export default (p5: P5, frame: FrameData, matrix: Matrix): Matrix => {
-  return renderers.ticTacToe(p5, frame, matrix);
+  return renderers.brownianMotion(p5, frame, matrix);
 };
